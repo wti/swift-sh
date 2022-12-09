@@ -185,13 +185,14 @@ builds the executable, and then executes it via `swift run`.
 The script is (only) rebuilt when the script file is newer than the executable.
 
 † Specify the cache parent directory using the (FreeDesktop) environment 
-variable XDG_CACHE_HOME.  If unspecified, on macOS `swif-sh` uses
+variable XDG_CACHE_HOME.  If unspecified, on macOS `swift-sh` uses
 `$HOME/Library/Developer/swift-sh.cache`, and otherwise it uses
-`$HOME/.cache/swift-sh`.
+`$HOME/.cache/swift-sh`.  Use `swift-sh --show-script-cache {script-file}`
+to display the expected path for the script build directory.
 
 # Swift Versions
 
-`swfit-sh` v2 requires Swift 5.1. We had to drop support for Swift v4.2
+`swift-sh` v2 requires Swift 5.1. We had to drop support for Swift v4.2
 because maintenance was just too tricky.
 
 `swift-sh` uses the active tools version, (ie: `xcode-select`) or whichever

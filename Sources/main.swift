@@ -19,6 +19,8 @@ do {
         try Command.editor(path: path)
     case .clean(let path):
         try Command.clean(path)
+    case .show(let path):
+        try Command.show(path)
     case .help:
         print(CommandLine.usage)
     }

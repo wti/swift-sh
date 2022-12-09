@@ -9,11 +9,18 @@ public class Script {
     let deps: [ImportSpecification]
     let args: [String]
 
+  /// Get  projected build directory for script (might not exist).
+  public static func buildDirForScriptFile(_ scriptFile: Path) -> Path {
+    let name = scriptFile.basename(dropExtension: true)
+    return Path.build/"\(name)_\(scriptFile.resolvedHash)"
+  }
+
     private let inputPathHash: String?
 
     public var name: String {
         switch input {
         case .path(let path):
+            // duplicated above in .buildDirForScriptFile
             return path.basename(dropExtension: true)
         case .string(let name, _):
             return name
@@ -21,12 +28,12 @@ public class Script {
     }
 
     public var buildDirectory: Path {
-        switch input {
-            case .path:
-                return Path.build/inputPathHash!
-            case .string:
-                return Path.build/name
-        }
+      switch input {
+      case .path(let scriptFile):
+        return Self.buildDirForScriptFile(scriptFile)
+      case .string:
+        return Path.build/name
+      }
     }
 
     public var mainSwift: Path {

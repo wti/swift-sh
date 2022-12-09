@@ -3,6 +3,23 @@ import XCTest
 import Path
 
 class ModeUnitTests: XCTestCase {
+    func testShowScriptCache() throws {
+        let name = "script"
+        func test(args: String..., line: UInt = #line, isTTY: Bool = true) throws {
+            let mode = try Mode(for: ["arg0"] + args, isTTY: isTTY)
+            if case .show(let path) = mode {
+                XCTAssertEqual(path.basename(), name, line: line)
+            } else {
+                XCTFail("not show: \(mode), args: \(args)")
+            }
+        }
+
+        try test(args: Mode.SHOW, name, isTTY: true)
+        try test(args: Mode.SHOW, name, isTTY: false)
+        XCTAssertThrowsError(try test(args: Mode.SHOW)) // no name
+        // misspell -> run mode? try test(args: "--show-script-cach", name)
+    }
+
     func testValidEjects() throws {
         func test(args: String..., line: UInt = #line, force: Bool, isTTY: Bool) throws {
             let mode = try Mode(for: ["arg0"] + args, isTTY: true)

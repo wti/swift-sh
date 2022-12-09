@@ -8,6 +8,7 @@ public extension CommandLine {
         var rv = """
             swift sh <script> [arguments]
             swift sh eject <script> [-f|--force]
+            swift sh \(Mode.SHOW) <script>
             swift sh --clean-cache [-C] [<script>]
             swift sh editor <script>
             """
@@ -100,7 +101,9 @@ public enum Mode {
     case edit(Path)
     case editor(Path)
     case clean(Path?)
+    case show(Path)
     case help
+    public static let SHOW = "--show-script-cache"
 
     public enum RunType {
         case stdin
@@ -146,6 +149,12 @@ public enum Mode {
                 self = .clean(Path(arg1) ?? Path.cwd/arg1)
             } else {
                 self = .clean(nil)
+            }
+        case Self.SHOW:
+            if let arg1 = parser.pop() {
+                self = .show(Path(arg1) ?? Path.cwd/arg1)
+            } else {
+                throw CommandLine.Error.invalidUsage
             }
         case let arg1?:
             let path = Path(arg1) ?? Path.cwd/arg1
